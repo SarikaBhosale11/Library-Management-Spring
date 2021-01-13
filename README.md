@@ -87,12 +87,67 @@ Library managament system prvides abilty to user to get aviable books and borrow
     - Assumption
      User has availabe book list from the REST I developed in Story 1. So frontend system will pass ids of user selected books along with user id to borrower REST. 
       
+    - Development/Testing Stratergy 
+    A. 1. com.hexad.library.managment.service.TestUserBorrowerServiceImplementor.testBorrowBook_BoookIsSuccefullyBorrowed() tests if book is succefully addded in borrowed list.
+       2. com.hexad.library.managment.service.TestUserBorrowerServiceImplementor.testBorrowBook_UserTriedBorrowingThirdBook() checks for MaximumAllowedBooksExceededException whe           user tries to borrow third book. 
+     
+    B. Integration Test case.
+       1. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookisAddedInBorrowerList() checks if book is added into borrwedBooks list
+       2. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookIsRemovedFromLibrary() checks if book is removed from available book list
+       3. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_InValidUserIdProvided() checks for 422 http response code is retuned when incorrect userId is given.   	   UserNotFoundException is mapped to  422 Unprocessable Entity
+       4. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_InValidBookIdProvided() 
     
+    C. Postamn test
+       
+       1. Success scenario: User is able to borrow book
+          URL: http://localhost:8080/library/borrowBook/user/1/book/101
+          Method: post
+          Headers: No additional headers were provided. 
+          Sample output: 
+              {
+   		 "userId": 1,
+    		 "userName": "Martin",
+    		 "borrowedBooks": [
+       		 {
+           	  "bookId": 101,
+            	  "bookName": "Lets C",
+           	  "bookAthour": "Kanitkar",
+           	 "numberOfCopiesAvailable": 1
+    		    }
+   		]
+	   }
    
- 
-
-             
-        
+ 	 2. Invalid input : incorrect user id is provided
+	    URL: http://localhost:8080/library/borrowBook/user/5/book/101
+      	    Method: post
+            Headers: No additional headers were provided.
+	    Sample output:    
+	    {
+    		"timestamp": "2021-01-13T23:01:42.932+00:00",
+   		 "status": 422,
+    		"error": "Unprocessable Entity",
+    		"message": "",
+   		 "path": "/library/borrowBook/user/5/book/101"
+	    }
+	    
+	    Improvement: it showed show meaning full message in case of 422 status
+	    
+     -- Exceptional Handling
+        Newly added cutomize exception
+	1. BookNotFoundException
+	2. UserNotFoundException
+	2. MaximumAllowedBooksExceededException
+	Error mapping was done for above exception in GlobalExceptionHandler.
+	
+	Newly added validator service classes
+	1. UserDataValidationService
+	2. BookDataValidationServiceImplementor
+	
+	
+	
+	
+	
+         
         
         
         
