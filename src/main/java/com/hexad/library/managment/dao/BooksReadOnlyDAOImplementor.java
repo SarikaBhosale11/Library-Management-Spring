@@ -1,11 +1,11 @@
 package com.hexad.library.managment.dao;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.hexad.library.managment.helper.DataHelper;
+import com.hexad.library.managment.helper.BooksDataHelper;
 import com.hexad.library.managment.vo.Book;
 
 /**
@@ -19,11 +19,11 @@ public class BooksReadOnlyDAOImplementor implements BooksListDAO
 {
 
     @Override
-    public Set<Book> getAvailableBooks()
+    public List<Book> getAvailableBooks()
     {
         // Here we will use Hibernate to retrive data from database
-        Set<Book> avaibleBooks = new HashSet<Book>();
-        avaibleBooks.addAll(DataHelper.getBooks());
+        List<Book> avaibleBooks = new ArrayList<Book>();
+        avaibleBooks.addAll(BooksDataHelper.getBooks().values());
         return avaibleBooks;
     }
 

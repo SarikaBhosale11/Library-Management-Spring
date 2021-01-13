@@ -1,10 +1,22 @@
-package com.hexad.library.managment.representation;
+package com.hexad.library.managment.representation.response;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepresetation
 {
+    public UserRepresetation(int userId, String userName)
+    {
+        super();
+        this.userId = userId;
+        this.userName = userName;
+    }
+
+    public UserRepresetation()
+    {
+
+    }
+
     private int userId;
 
     public int getUserId()
@@ -29,16 +41,16 @@ public class UserRepresetation
         this.userName = userName;
     }
 
-    private List<BookRepresentation> borrowedBook = new ArrayList<>();
+    private List<BookRepresentation> borrowedBooks = new ArrayList<>();
 
-    public List<BookRepresentation> getBorrowedBook()
+    public List<BookRepresentation> getBorrowedBooks()
     {
-        return borrowedBook;
+        return borrowedBooks;
     }
 
     public void addBookInUserBorrowedList(BookRepresentation book)
     {
-        getBorrowedBook().add(book);
+        getBorrowedBooks().add(book);
     }
 
 }

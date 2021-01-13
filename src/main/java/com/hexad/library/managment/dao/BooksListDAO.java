@@ -3,7 +3,7 @@
  */
 package com.hexad.library.managment.dao;
 
-import java.util.Set;
+import java.util.List;
 
 import com.hexad.library.managment.vo.Book;
 
@@ -13,5 +13,5 @@ import com.hexad.library.managment.vo.Book;
 
 public interface BooksListDAO
 {
-    Set<Book> getAvailableBooks();
+    List<Book> getAvailableBooks();
 }

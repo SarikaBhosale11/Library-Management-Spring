@@ -1,14 +1,14 @@
 package com.hexad.library.managment.service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hexad.library.managment.dao.BooksListDAO;
-import com.hexad.library.managment.representation.BookRepresentation;
-import com.hexad.library.managment.representation.LibraryRepresentation;
+import com.hexad.library.managment.representation.response.BookRepresentation;
+import com.hexad.library.managment.representation.response.LibraryRepresentation;
 import com.hexad.library.managment.vo.Book;
 
 @Service
@@ -36,19 +36,19 @@ public class BookServiceImplementor implements BookService
      * @param books
      * @return
      */
-    protected LibraryRepresentation getLibraryData(Set<Book> books)
+    protected LibraryRepresentation getLibraryData(List<Book> books)
     {
-        Set<BookRepresentation> bookSet = new HashSet<>();
+        List<BookRepresentation> bookList = new ArrayList<>();
         // iterate over books set, add to representational data only if it has any available copy.
         for (Book book : books) {
             int numberOfCopiesAvailable = book.getNumberOfCopiesAvailable();
             if (numberOfCopiesAvailable > 0) {
-                bookSet.add(new BookRepresentation(book.getBookId(), book.getBookName(), book.getBookAthour(),
+                bookList.add(new BookRepresentation(book.getBookId(), book.getBookName(), book.getBookAthour(),
                     numberOfCopiesAvailable));
             }
         }
         LibraryRepresentation library = new LibraryRepresentation();
-        library.getAvailableBooks().addAll(bookSet);
+        library.getAvailableBooks().addAll(bookList);
         return library;
     }
 

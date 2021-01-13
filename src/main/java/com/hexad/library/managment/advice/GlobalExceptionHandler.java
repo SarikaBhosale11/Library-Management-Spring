@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.hexad.library.managment.exception.BookNotFoundException;
+import com.hexad.library.managment.exception.MaximumAllowedBooksExceededException;
+import com.hexad.library.managment.exception.UserNotFoundException;
+
 /**
  * This class handles possible exception and returns appropriate HTTP response
  * 
@@ -25,5 +29,29 @@ public class GlobalExceptionHandler
     {
         logger.warn("Runtime Exception ooccured", exception.getMessage());
         return "Internal error occured";
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY, reason = "Incorect userId provided")
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleUserNotFoundException(HttpServletRequest request, Exception exception)
+    {
+        logger.warn("Incorect userId provided", exception.getMessage());
+        return "Incorect userId provided";
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY, reason = "Incorect bookid provided")
+    @ExceptionHandler(BookNotFoundException.class)
+    public String handleBookNotFoundException(HttpServletRequest request, Exception exception)
+    {
+        logger.warn("Incorect bookid provided", exception.getMessage());
+        return "Incorect bookid provided";
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY, reason = "Maximum Allowed books limit Exceeded")
+    @ExceptionHandler(MaximumAllowedBooksExceededException.class)
+    public String handleMaximumAllowedBooksExceededException(HttpServletRequest request, Exception exception)
+    {
+        logger.warn("Maximum Allowed Books limit Exceeded ", exception.getMessage());
+        return "Maximum Allowed books limit Exceeded";
     }
 }

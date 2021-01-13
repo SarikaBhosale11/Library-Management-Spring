@@ -1,17 +1,15 @@
 package com.hexad.library.managment.controller;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hexad.library.managment.representation.LibraryRepresentation;
+import com.hexad.library.managment.representation.response.LibraryRepresentation;
 import com.hexad.library.managment.service.BookService;
 
 /**
- * This controller provides entry point for REST service and provides Books and avaiblity
+ * This controller provides entry point for REST service and provides Books and availablity
  * 
  * @author intel
  */
@@ -28,8 +26,8 @@ public class BooksController
         this.bookServiceImplementor = bookServiceImplementor;
     }
 
-    @GetMapping("/getAvailableBooks")
-    public LibraryRepresentation getAvailableBooks() throws IllegalAccessException, InvocationTargetException
+    @GetMapping("library/getAvailableBooks")
+    public LibraryRepresentation getAvailableBooks()
     {
         return bookServiceImplementor.getAvailableBooks();
     }

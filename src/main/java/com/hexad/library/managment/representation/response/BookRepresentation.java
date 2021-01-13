@@ -1,4 +1,4 @@
-package com.hexad.library.managment.representation;
+package com.hexad.library.managment.representation.response;
 
 public class BookRepresentation
 {

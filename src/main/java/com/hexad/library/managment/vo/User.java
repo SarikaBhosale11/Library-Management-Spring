@@ -5,6 +5,14 @@ import java.util.List;
 
 public class User
 {
+    public User(int userId, String userName)
+    {
+        super();
+        this.userId = userId;
+        this.userName = userName;
+        this.borrowedBooks = new ArrayList<Book>();
+    }
+
     private int userId;
 
     public int getUserId()
@@ -29,16 +37,16 @@ public class User
         this.userName = userName;
     }
 
-    private List<Book> borrowedBook = new ArrayList<>();
+    private List<Book> borrowedBooks = new ArrayList<>();
 
-    public List<Book> getBorrowedBook()
+    public List<Book> getBorrowedBooks()
     {
-        return borrowedBook;
+        return borrowedBooks;
     }
 
     public void addBookInUserBorrowedList(Book book)
     {
-        getBorrowedBook().add(book);
+        getBorrowedBooks().add(book);
     }
 
 }
