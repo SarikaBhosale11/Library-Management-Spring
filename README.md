@@ -79,12 +79,12 @@ Library managament system prvides abilty to user to get aviable books and borrow
       - Database 
       From DAO layer we can use Hibernate/jpa to fetch data from database. But I have created DataHelper class which returns static dummy data. 
 	  
-	  # Flow description : Story 2
-   - Requirement
+# Flow description : Story 2
+    - Requirement
      User should be able to borrow books from library.  Each User has a borrowing limit of 2 books at any point of time. 
      the book will be added to users borrowed list and removed from available list. 
 
-     Assumption
+    - Assumption
      User has availabe book list from the REST I developed in Story 1. So frontend system will pass ids of user selected books along with user id to borrower REST. 
       
       
