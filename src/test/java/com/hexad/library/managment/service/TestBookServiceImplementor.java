@@ -37,11 +37,16 @@ class TestBookServiceImplementor
         Set<Book> avaibleBooks = new HashSet<Book>();
         Mockito.when(booksReadOnlyDAOImplementor.getAvailableBooks()).thenReturn(avaibleBooks);
 
+        checkAssertions(bookServiceImplementor, 0);
+    }
+
+    protected void checkAssertions(BookService bookServiceImplementor, int expectedBookListSize)
+    {
         LibraryRepresentation libraryRepresentation = bookServiceImplementor.getAvailableBooks();
         Assertions.assertNotNull(libraryRepresentation);
         Set<BookRepresentation> bookSet = libraryRepresentation.getAvailableBooks();
         Assertions.assertNotNull(bookSet);
-        Assertions.assertEquals(0, bookSet.size());
+        Assertions.assertEquals(expectedBookListSize, bookSet.size());
     }
 
     @Test
@@ -53,11 +58,19 @@ class TestBookServiceImplementor
         availableBooks.add(new Book(102, "Head First Java", "Brain", 1));
         Mockito.when(booksReadOnlyDAOImplementor.getAvailableBooks()).thenReturn(availableBooks);
 
-        LibraryRepresentation libraryRepresentation = bookServiceImplementor.getAvailableBooks();
-        Assertions.assertNotNull(libraryRepresentation);
-        Set<BookRepresentation> bookSet = libraryRepresentation.getAvailableBooks();
-        Assertions.assertNotNull(bookSet);
-        Assertions.assertEquals(2, bookSet.size());
+        checkAssertions(bookServiceImplementor, 2);
+    }
+
+    @Test
+    void testGetAvailableBooks_booksAvailableCondition_ForZeroCopies()
+    {
+        BookService bookServiceImplementor = new BookServiceImplementor(booksReadOnlyDAOImplementor);
+        Set<Book> availableBooks = new HashSet<Book>();
+        availableBooks.add(new Book(101, "Lets C", "Kanitkar", 2));
+        availableBooks.add(new Book(102, "Head First Java", "Brain", 0));
+        Mockito.when(booksReadOnlyDAOImplementor.getAvailableBooks()).thenReturn(availableBooks);
+
+        checkAssertions(bookServiceImplementor, 1);
     }
 
 }

@@ -3,13 +3,13 @@ package com.hexad.library.managment.representation;
 public class BookRepresentation
 {
 
-    public BookRepresentation(int bookId, String bookName, String bookAthour, int numberOfCopies)
+    public BookRepresentation(int bookId, String bookName, String bookAthour, int numberOfCopiesAvailable)
     {
         super();
         this.bookId = bookId;
         this.bookName = bookName;
         this.bookAthour = bookAthour;
-        this.numberOfCopies = numberOfCopies;
+        this.numberOfCopiesAvailable = numberOfCopiesAvailable;
     }
 
     private int bookId;
@@ -48,26 +48,26 @@ public class BookRepresentation
         this.bookAthour = bookAthour;
     }
 
-    private int numberOfCopies = 0;
+    private int numberOfCopiesAvailable = 0;
 
-    public int getNumberOfCopies()
+    public int getNumberOfCopiesAvailable()
     {
-        return numberOfCopies;
+        return numberOfCopiesAvailable;
     }
 
-    public void increamentNumberOfCopies()
+    public void increamentNumberOfCopiesAvailable()
     {
-        this.numberOfCopies++;
+        this.numberOfCopiesAvailable++;
     }
 
-    public void reduceNumberOfCopies()
+    public void reduceNumberOfCopiesAvailable()
     {
-        this.numberOfCopies--;
+        this.numberOfCopiesAvailable--;
     }
 
-    public void setNumberOfCopies(int numberOfCopies)
+    public void setNumberOfCopiesAvailable(int numberOfCopiesAvailable)
     {
-        this.numberOfCopies = numberOfCopies;
+        this.numberOfCopiesAvailable = numberOfCopiesAvailable;
     }
 
 }

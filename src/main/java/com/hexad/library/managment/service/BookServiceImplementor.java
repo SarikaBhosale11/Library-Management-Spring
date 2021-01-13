@@ -39,9 +39,14 @@ public class BookServiceImplementor implements BookService
     protected LibraryRepresentation getLibraryData(Set<Book> books)
     {
         Set<BookRepresentation> bookSet = new HashSet<>();
-        // iterate over books set and copy to representational object
-        books.stream().forEach((eachBook) -> bookSet.add(new BookRepresentation(eachBook.getBookId(),
-            eachBook.getBookName(), eachBook.getBookAthour(), eachBook.getNumberOfCopies())));
+        // iterate over books set, add to representational data only if it has any available copy.
+        for (Book book : books) {
+            int numberOfCopiesAvailable = book.getNumberOfCopiesAvailable();
+            if (numberOfCopiesAvailable > 0) {
+                bookSet.add(new BookRepresentation(book.getBookId(), book.getBookName(), book.getBookAthour(),
+                    numberOfCopiesAvailable));
+            }
+        }
         LibraryRepresentation library = new LibraryRepresentation();
         library.getAvailableBooks().addAll(bookSet);
         return library;

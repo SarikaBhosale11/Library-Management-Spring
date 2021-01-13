@@ -9,7 +9,7 @@ public class Book
         this.bookId = bookId;
         this.bookName = bookName;
         this.bookAthour = bookAthour;
-        this.numberOfCopies = numberOfCopies;
+        this.numberOfCopiesAvailable = numberOfCopies;
     }
 
     private int bookId;
@@ -48,26 +48,26 @@ public class Book
         this.bookAthour = bookAthour;
     }
 
-    private int numberOfCopies = 0;
+    private int numberOfCopiesAvailable = 0;
 
-    public int getNumberOfCopies()
+    public int getNumberOfCopiesAvailable()
     {
-        return numberOfCopies;
+        return numberOfCopiesAvailable;
     }
 
-    public void increamentNumberOfCopies()
+    public void increamentNumberOfCopiesAvailable()
     {
-        this.numberOfCopies++;
+        this.numberOfCopiesAvailable++;
     }
 
-    public void reduceNumberOfCopies()
+    public void reduceNumberOfCopiesAvailable()
     {
-        this.numberOfCopies--;
+        this.numberOfCopiesAvailable--;
     }
 
-    public void setNumberOfCopies(int numberOfCopies)
+    public void setNumberOfCopiesAvailable(int numberOfCopies)
     {
-        this.numberOfCopies = numberOfCopies;
+        this.numberOfCopiesAvailable = numberOfCopies;
     }
 
     @Override

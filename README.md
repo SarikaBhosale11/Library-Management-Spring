@@ -37,10 +37,11 @@ Library managament system prvides abilty to user to get aviable books and borrow
      - Development/Testing Stratergy 
      A.  1. com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_NoBooksAvailableCondition() was written and it was  failing 
             as there was no application logic was exist.
-         2. with flow implementation test case was passed for empty list.
-         3. Then com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition() was written and as it was failing 
-            as we had only empty book list.
-         4. it passsed over time when DataHelper class was implemeted to return dummy data.
+            With flow implementation test case was passed for empty list.
+         2. Then com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition() was written and as it was  failing 
+            as we had only empty book list. It passsed over time when DataHelper class was implemeted to return dummy data.
+		 3. com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition_ForZeroCopies() was written. Intially it failed
+		    as BookServiceImplementor.getLibraryData() method was not checking for number of ccpies available. Check was added in method and test case passed.
         
      B. Integration Test case.
         SpringBoot Test was written to call REST service and check if book list is written. 
@@ -60,13 +61,13 @@ Library managament system prvides abilty to user to get aviable books and borrow
                     "bookId": 102,
                     "bookName": "Head First Java",
                     "bookAthour": "Brain",
-                    "numberOfCopies": 1
+                    "numberOfCopiesAvailable": 1
                 },
                 {
                     "bookId": 101,
                     "bookName": "Lets C",
                     "bookAthour": "Kanitkar",
-                    "numberOfCopies": 2
+                    "numberOfCopiesAvailable": 2
                 }
             ]
            }
@@ -77,6 +78,14 @@ Library managament system prvides abilty to user to get aviable books and borrow
       
       - Database 
       From DAO layer we can use Hibernate/jpa to fetch data from database. But I have created DataHelper class which returns static dummy data. 
+	  
+	  # Flow description : Story 2
+   - Requirement
+     User should be able to borrow books from library.  Each User has a borrowing limit of 2 books at any point of time. 
+     the book will be added to users borrowed list and removed from available list. 
+
+     Assumption
+     User has availabe book list from the REST I developed in Story 1. So frontend system will pass ids of user selected books along with user id to borrower REST. 
       
       
    
