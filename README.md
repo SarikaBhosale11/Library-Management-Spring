@@ -51,7 +51,7 @@ Library managament system prvides abilty to user to get aviable books and borrow
         https://spring.io/guides/gs/testing-web/.
         
      c. Postman Test
-        URL: http://localhost:8080/getAvailableBooks
+        URL: http://localhost:8080/library/getAvailableBooks
         Method: get
         Headers: No additional headers were provided. 
         Sample output: 
@@ -88,8 +88,8 @@ Library managament system prvides abilty to user to get aviable books and borrow
      User has availabe book list from the REST I developed in Story 1. So frontend system will pass ids of user selected books along with user id to borrower REST. 
       
     - Development/Testing Stratergy 
-    A. 1. com.hexad.library.managment.service.TestUserBorrowerServiceImplementor.testBorrowBook_BoookIsSuccefullyBorrowed() tests if book is succefully addded in borrowed list.
-       2. com.hexad.library.managment.service.TestUserBorrowerServiceImplementor.testBorrowBook_UserTriedBorrowingThirdBook() checks for MaximumAllowedBooksExceededException whe           user tries to borrow third book. 
+    A. 1. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_BoookIssuccefullyBorrowed() tests if book is succefully addded in borrowed     	   list.
+       2. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_UserTriedBorrowingThirdBook() checks for MaximumAllowedBooksExceededException  	    when user tries to borrow third book. 
      
     B. Integration Test case.
        1. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookisAddedInBorrowerList() checks if book is added into borrwedBooks list
@@ -152,11 +152,11 @@ Library managament system prvides abilty to user to get aviable books and borrow
      then the book is removed from the library. 
      
      - Development/Testing Stratergy 
-    A. com.hexad.library.managment.service.TestUserBorrowerServiceImplementor.testBorrowBook_UserTriedBorrowAnotherCopyOfBook() checks for    		
+    A. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_UserTriedBorrowAnotherCopyOfBook() checks for    		
       MaximumAllowedCopyOfBookExceededException when user try to borrow anther copy of book which he has already borrowed previously
       
     B. Integration Test case.
-      com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BuyOneCopyOfBook() covers following scenarios in one after other
+      com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BuyOneCopyOfBook() covers following scenarios in given order
       1.  Initially two copies of Book "Lets C" bookId=101 & one copy of "Head First Java" bookId=102 are available
       2.  borrow "Lets C" bookId=101 book for user userId=1
       3.  available books still show "Lets C" bookId=101 as it still has one copy left and one copy of "Head First Java" bookId=102
@@ -177,8 +177,31 @@ Library managament system prvides abilty to user to get aviable books and borrow
     Validates if user has already borrowed copy Of book
         
         
-        
+ # Flow description : Story 4
+    -Requirement
+    User should be able to return book one or two boks and accordingly stocks should be updated.
+    
+     - Development/Testing Stratergy 
+     A. 1. .hexad.library.managment.service.TestUserBookReturnServiceImplementor.testBorrowBook_BoookReturnedSuccessful_NoBookInBorrowedList() 
+           user returns one book and borrowed book list is empty.
+	2. com.hexad.library.managment.service.TestUserBookReturnServiceImplementor.testBorrowBook_BoookReturnedSuccessful_OneBookInBorrowedList()
+	   user returns one book and borrowed book list has one book. 
+	   
+	   
+     B. Integration test cases 	
      
-     
+     com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookIsReturned() covers following scenarios in given order
+    1. borrow book "Lets C" bookId=101
+    2. borrow book "Head First Java" bookId=102
+    3. get availalble books list
+       only one copy of "Lets C" bookId=101 should be available and "Head First Java" bookId=102 is not available
+    4. return "Lets C" bookId=101    
+    5. get availalble books list
+      two copies of book "Lets C" bookId=101 are available and "Head First Java" bookId=102 is not available
+    6. return "Head First Java" bookId=101
+       both books returned borrowed list should be empty
+    7. get availalble books list.
+       two copies of book "Lets C" bookId=101 are available and "Head First Java" bookId=102 is available
+      
      
   
