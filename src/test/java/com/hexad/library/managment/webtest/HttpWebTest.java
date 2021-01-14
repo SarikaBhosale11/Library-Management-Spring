@@ -173,6 +173,26 @@ public class HttpWebTest
         Assertions.assertEquals(1, booklist.size());
         Assertions.assertEquals(1, booklist.get(0).getNumberOfCopiesAvailable());
         Assertions.assertEquals("Lets C", booklist.get(0).getBookName());
+
+        // try to borrow "Lets C" bookId=101 for different user userId=2
+        user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/borrowBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(2), Integer.valueOf(101));
+        Assertions.assertNotNull(user);
+        borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(1, borrwedBooks.size()); // each of "Lets C"
+        Assertions.assertEquals("Lets C", borrwedBooks.get(0).getBookName());
+        Assertions.assertEquals(0, borrwedBooks.get(0).getNumberOfCopiesAvailable());
+
+        // Now now book should be there in available list
+        libraryRepresentation = this.restTemplate.getForObject("http://localhost:" + port + "library/getAvailableBooks",
+            LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(0, booklist.size());
+
     }
 
 }
