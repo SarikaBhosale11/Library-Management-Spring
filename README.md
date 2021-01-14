@@ -132,25 +132,49 @@ Library managament system prvides abilty to user to get aviable books and borrow
 	    
 	    Improvement: it showed show meaning full message in case of 422 status
 	    
-     -- Exceptional Handling
+    - Exceptional Handling
         Newly added cutomize exception
 	1. BookNotFoundException
 	2. UserNotFoundException
 	2. MaximumAllowedBooksExceededException
-	Error mapping was done for above exception in GlobalExceptionHandler.
+	Error mapping has done for above exception in GlobalExceptionHandler.
 	
-	Newly added validator service classes
-	1. UserDataValidationService
-	2. BookDataValidationServiceImplementor
-	
-	
+     - Newly added validator service classes
+	1. UserDataValidationService : Validates If valid userId provided and If user has already borrowed two books
+	2. BookDataValidationServiceImplementor : Validates if valid bookId provided
 	
 	
+# Flow description : Story 3
+    - Requirement
+     There are more than one copy of a book in the library, user should be able to borrow one copy of book.
+     then one copy of the book is added to my borrowed list
+     If there is only one copy of a book in the library, user should be able to borrow one copy of book
+     then the book is removed from the library. 
+     
+     - Development/Testing Stratergy 
+    A. com.hexad.library.managment.service.TestUserBorrowerServiceImplementor.testBorrowBook_UserTriedBorrowAnotherCopyOfBook() checks for    		
+      MaximumAllowedCopyOfBookExceededException when user try to borrow anther copy of book which he has already borrowed previously
+      
+    B. Integration Test case.
+      com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BuyOneCopyOfBook() covers following scenarios in one after other
+      1.  Initially two copies of Book "Lets C" bookId=101 & one copy of "Head First Java" bookId=102 are available
+      2.  borrow "Lets C" bookId=101 book for user userId=1
+      3.  available books still show "Lets C" bookId=101 as it still has one copy left and one copy of "Head First Java" bookId=102
+      4.  again borrow "Lets C" bookId=101 for user userId=1 we should get exception
+           MaximumAllowedCopyOfBookExceededException is mapped to HttpStatus.UNPROCESSABLE_ENTITY 422
+      5.  try to borrow "Head First Java" bookId=102 user  userId=1
+      6.  Now only "Lets C" bookId=101 should be there in available list and has one copy available
+      7.  try to borrow "Lets C" bookId=101 for different user userId=2
+      8.  Now no book should be there in available list
+      
+    - Exceptional Handling
+         Newly added cutomize exception 
+        1. MaximumAllowedCopyOfBookExceededException
+	Error mapping has done for above exception in GlobalExceptionHandler.
 	
-         
-        
-        
-        
+    - Newly added validator service classes/Method
+    com.hexad.library.managment.validation.user.UserDataValidationService.checkIfUserHasAlreadyBorrowedCopyOfBook(int, Book) : 
+    Validates if user has already borrowed copy Of book
         
         
         
