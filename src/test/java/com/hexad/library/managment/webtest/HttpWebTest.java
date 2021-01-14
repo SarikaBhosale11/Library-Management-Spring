@@ -38,7 +38,7 @@ public class HttpWebTest
     }
 
     @Test
-    public void testBorrowBook_BookisAddedInBorrowerList() throws Exception
+    public void testBorrowBook_BookIsAddedInBorrowerList() throws Exception
     {
         UserRepresetation user = this.restTemplate.postForObject(
             "http://localhost:" + port + "library/borrowBook/user/{userId}/book/{bookId}", null,
@@ -83,7 +83,7 @@ public class HttpWebTest
     }
 
     @Test
-    public void testBorrowBook_InValidBookIdProvided() throws Exception
+    public void testBorrowBook_InvalidBookIdProvided() throws Exception
     {
         ResponseEntity<String> response = restTemplate
             .postForEntity("http://localhost:" + port + "library/borrowBook/user/1/book/109", null, String.class);
@@ -192,7 +192,109 @@ public class HttpWebTest
         booklist = libraryRepresentation.getAvailableBooks();
         Assertions.assertNotNull(booklist);
         Assertions.assertEquals(0, booklist.size());
+    }
 
+    @Test
+    public void testBorrowBook_BookIsReturned() throws Exception
+    {
+        // borrow book "Lets C" bookId=101
+        UserRepresetation user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/borrowBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(1), Integer.valueOf(101));
+        Assertions.assertNotNull(user);
+        List<BookRepresentation> borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(1, borrwedBooks.size());
+        Assertions.assertEquals("Lets C", borrwedBooks.get(0).getBookName());
+        Assertions.assertEquals(1, borrwedBooks.get(0).getNumberOfCopiesAvailable());
+
+        // borrow book "Head First Java" bookId=102
+        user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/borrowBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(1), Integer.valueOf(102));
+        Assertions.assertNotNull(user);
+        borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(2, borrwedBooks.size());
+        Assertions.assertEquals("Lets C", borrwedBooks.get(0).getBookName());
+        Assertions.assertEquals(1, borrwedBooks.get(0).getNumberOfCopiesAvailable());
+
+        // only one copy of "Lets C" bookId=101 should be available
+        // "Head First Java" bookId=102 is not available
+        LibraryRepresentation libraryRepresentation = this.restTemplate
+            .getForObject("http://localhost:" + port + "library/getAvailableBooks", LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        List<BookRepresentation> booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(1, booklist.size());
+        BookRepresentation letCBook = booklist.get(0);
+        Assertions.assertNotNull(letCBook);
+        Assertions.assertEquals(1, letCBook.getNumberOfCopiesAvailable());
+
+        // return "Lets C" bookId=101
+        user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/returnBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(1), Integer.valueOf(101));
+        Assertions.assertNotNull(user);
+        borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(1, borrwedBooks.size());
+        Assertions.assertEquals("Head First Java", borrwedBooks.get(0).getBookName());
+
+        // two copies of book "Lets C" bookId=101 are available
+        // "Head First Java" bookId=102 is not available
+        libraryRepresentation = this.restTemplate.getForObject("http://localhost:" + port + "library/getAvailableBooks",
+            LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(1, booklist.size());
+        letCBook = null;
+        for (BookRepresentation book : booklist) {
+            if (book.getBookId() == 101) {
+                letCBook = book;
+                break;
+            }
+        }
+        Assertions.assertNotNull(letCBook);
+        Assertions.assertEquals(2, letCBook.getNumberOfCopiesAvailable());
+
+        // return "Head First Java" bookId=101
+        // both books returned borrowed list should be empty
+        user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/returnBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(1), Integer.valueOf(102));
+        Assertions.assertNotNull(user);
+        borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(0, borrwedBooks.size());
+
+        // two copies of book "Lets C" bookId=101 are available
+        // "Head First Java" bookId=102 is available
+        libraryRepresentation = this.restTemplate.getForObject("http://localhost:" + port + "library/getAvailableBooks",
+            LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(2, booklist.size());
+        letCBook = null;
+        for (BookRepresentation book : booklist) {
+            if (book.getBookId() == 101) {
+                letCBook = book;
+                break;
+            }
+        }
+        Assertions.assertNotNull(letCBook);
+        Assertions.assertEquals(2, letCBook.getNumberOfCopiesAvailable());
+        BookRepresentation headFirst = null;
+        for (BookRepresentation book : booklist) {
+            if (book.getBookId() == 102) {
+                headFirst = book;
+                break;
+            }
+        }
+        Assertions.assertNotNull(headFirst);
+        Assertions.assertEquals(1, headFirst.getNumberOfCopiesAvailable());
     }
 
 }

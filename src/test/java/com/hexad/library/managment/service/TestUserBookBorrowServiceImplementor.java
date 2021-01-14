@@ -20,7 +20,7 @@ import com.hexad.library.managment.validation.user.UserDataValidationService;
 import com.hexad.library.managment.vo.Book;
 import com.hexad.library.managment.vo.User;
 
-class TestUserBorrowerServiceImplementor
+class TestUserBookBorrowServiceImplementor
 {
     private UserBorrowerUpdateDAO userBorrowerUpdateDAOImplementor;
 
@@ -42,17 +42,17 @@ class TestUserBorrowerServiceImplementor
     void testBorrowBook_BoookIssuccefullyBorrowed() throws UserNotFoundException, BookNotFoundException,
         MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException
     {
-        UserBorrowerServiceImplementor userBorrowerServiceImplementor =
-            new UserBorrowerServiceImplementor(userBorrowerUpdateDAOImplementor, userDataValidationServiceImplementor);
+        UserBookBorrowServiceImplementor userBookBorrowServiceImplementor = new UserBookBorrowServiceImplementor(
+            userBorrowerUpdateDAOImplementor, userDataValidationServiceImplementor);
 
         User user = new User(1, "Test user");
         List<Book> borrowedBooks = new ArrayList<>();
         borrowedBooks.add(new Book(101, "Lets C", "Kanitkar", 1));
         user.getBorrowedBooks().addAll(borrowedBooks);
-        Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBorrowerDetails(Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBookBorrowDetails(Mockito.anyInt(), Mockito.anyInt()))
             .thenReturn(user);
 
-        UserRepresetation userRepresetation = userBorrowerServiceImplementor.borrowBook(1, 101);
+        UserRepresetation userRepresetation = userBookBorrowServiceImplementor.borrowBook(1, 101);
         Assertions.assertNotNull(userRepresetation);
         List<BookRepresentation> borrowedBooksOutput = userRepresetation.getBorrowedBooks();
         Assertions.assertNotNull(borrowedBooksOutput);
@@ -64,39 +64,39 @@ class TestUserBorrowerServiceImplementor
     void testBorrowBook_UserTriedBorrowingThirdBook()
         throws UserNotFoundException, BookNotFoundException, MaximumAllowedBooksExceededException
     {
-        UserBorrowerServiceImplementor userBorrowerServiceImplementor =
-            new UserBorrowerServiceImplementor(userBorrowerUpdateDAOImplementor, userDataValidationServiceImplementor);
+        UserBookBorrowServiceImplementor userBookBorrowServiceImplementor = new UserBookBorrowServiceImplementor(
+            userBorrowerUpdateDAOImplementor, userDataValidationServiceImplementor);
 
         User user = new User(1, "Test user");
         List<Book> borrowedBooks = new ArrayList<>();
         borrowedBooks.add(new Book(101, "Lets C", "Kanitkar", 1));
         user.getBorrowedBooks().addAll(borrowedBooks);
-        Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBorrowerDetails(Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBookBorrowDetails(Mockito.anyInt(), Mockito.anyInt()))
             .thenReturn(user);
         Mockito.doThrow(MaximumAllowedBooksExceededException.class).when(userDataValidationServiceImplementor)
-            .checkIfUserHasAlreadyBorrowedTwoBooks(Mockito.any());
+            .checkIfUserHasAlreadyBorrowedTwoBooks(1);
         Assertions.assertThrows(MaximumAllowedBooksExceededException.class, () -> {
-            userBorrowerServiceImplementor.borrowBook(1, 101);
+            userBookBorrowServiceImplementor.borrowBook(1, 101);
         });
     }
 
     @Test
     void testBorrowBook_UserTriedBorrowAnotherCopyOfBook()
-        throws UserNotFoundException, BookNotFoundException, MaximumAllowedBooksExceededException
+        throws UserNotFoundException, BookNotFoundException, MaximumAllowedCopyOfBookExceededException
     {
-        UserBorrowerServiceImplementor userBorrowerServiceImplementor =
-            new UserBorrowerServiceImplementor(userBorrowerUpdateDAOImplementor, userDataValidationServiceImplementor);
+        UserBookBorrowServiceImplementor userBookBorrowServiceImplementor = new UserBookBorrowServiceImplementor(
+            userBorrowerUpdateDAOImplementor, userDataValidationServiceImplementor);
 
         User user = new User(1, "Test user");
         List<Book> borrowedBooks = new ArrayList<>();
         borrowedBooks.add(new Book(101, "Lets C", "Kanitkar", 1));
         user.getBorrowedBooks().addAll(borrowedBooks);
-        Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBorrowerDetails(Mockito.anyInt(), Mockito.anyInt()))
+        Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBookBorrowDetails(Mockito.anyInt(), Mockito.anyInt()))
             .thenReturn(user);
         Mockito.doThrow(MaximumAllowedCopyOfBookExceededException.class).when(userDataValidationServiceImplementor)
-            .checkIfUserHasAlreadyBorrowedTwoBooks(Mockito.any());
-        Assertions.assertThrows(MaximumAllowedBooksExceededException.class, () -> {
-            userBorrowerServiceImplementor.borrowBook(1, 101);
+            .checkIfUserHasAlreadyBorrowedCopyOfBook(1, new Book(101, "Lets C", "Kanitkar", 1));
+        Assertions.assertThrows(MaximumAllowedCopyOfBookExceededException.class, () -> {
+            userBookBorrowServiceImplementor.borrowBook(1, 101);
         });
     }
 

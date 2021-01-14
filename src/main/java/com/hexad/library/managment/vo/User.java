@@ -49,4 +49,9 @@ public class User
         getBorrowedBooks().add(book);
     }
 
+    public void removeBookFromUserBorrowedList(Book book)
+    {
+        getBorrowedBooks().remove(book);
+    }
+
 }

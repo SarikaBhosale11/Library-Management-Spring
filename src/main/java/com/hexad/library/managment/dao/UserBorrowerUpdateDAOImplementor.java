@@ -14,7 +14,7 @@ public class UserBorrowerUpdateDAOImplementor implements UserBorrowerUpdateDAO
 {
 
     @Override
-    public User updateUserBorrowerDetails(int userId, int bookId) throws UserNotFoundException, BookNotFoundException
+    public User updateUserBookBorrowDetails(int userId, int bookId) throws UserNotFoundException, BookNotFoundException
     {
         Book book = BooksDataHelper.getBookById(bookId);
         User user = UsersDataHelper.getUserbyId(userId);
@@ -33,6 +33,28 @@ public class UserBorrowerUpdateDAOImplementor implements UserBorrowerUpdateDAO
     protected void reduceNumberOfCopiesOfBook(Book book)
     {
         book.reduceNumberOfCopiesAvailable();
+    }
+
+    @Override
+    public User updateUserBookReturnDetails(int userId, int bookId) throws UserNotFoundException, BookNotFoundException
+    {
+        Book book = BooksDataHelper.getBookById(bookId);
+        User user = UsersDataHelper.getUserbyId(userId);
+        removeBookFromUserBorrowedList(user, book);
+        increamentNumberOfCopiesAvailableOfBook(book);
+        UsersDataHelper.updateChangedUserInfo(userId, user);
+        BooksDataHelper.updateAvailableBookInfo(bookId, book);
+        return UsersDataHelper.getUserbyId(userId);
+    }
+
+    protected void removeBookFromUserBorrowedList(User user, Book book)
+    {
+        user.removeBookFromUserBorrowedList(book);
+    }
+
+    protected void increamentNumberOfCopiesAvailableOfBook(Book book)
+    {
+        book.increamentNumberOfCopiesAvailable();
     }
 
 }

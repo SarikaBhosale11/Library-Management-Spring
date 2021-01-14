@@ -11,7 +11,7 @@ import com.hexad.library.managment.exception.MaximumAllowedBooksExceededExceptio
 import com.hexad.library.managment.exception.MaximumAllowedCopyOfBookExceededException;
 import com.hexad.library.managment.exception.UserNotFoundException;
 import com.hexad.library.managment.representation.response.UserRepresetation;
-import com.hexad.library.managment.service.UserBorrowerService;
+import com.hexad.library.managment.service.UserBookBorrowService;
 import com.hexad.library.managment.validation.book.BookDataValidationService;
 import com.hexad.library.managment.validation.user.UserDataValidationService;
 
@@ -22,21 +22,21 @@ import com.hexad.library.managment.validation.user.UserDataValidationService;
  */
 @RestController
 @RequestMapping
-public class UserBorrowerController
+public class UserBookBorrowController
 {
 
-    private UserBorrowerService userBorrowerServiceImplementor;
+    private UserBookBorrowService userBookBorrowServiceImplementor;
 
     private UserDataValidationService userDataValidationServiceImplementor;
 
     private BookDataValidationService bookDataValidationServiceImplementor;
 
     @Autowired
-    public UserBorrowerController(UserBorrowerService userBorrowerServiceImplementor,
+    public UserBookBorrowController(UserBookBorrowService userBorrowerServiceImplementor,
         UserDataValidationService userDataValidationServiceImplementor,
         BookDataValidationService bookDataValidationServiceImplementor)
     {
-        this.userBorrowerServiceImplementor = userBorrowerServiceImplementor;
+        this.userBookBorrowServiceImplementor = userBorrowerServiceImplementor;
         this.userDataValidationServiceImplementor = userDataValidationServiceImplementor;
         this.bookDataValidationServiceImplementor = bookDataValidationServiceImplementor;
     }
@@ -46,11 +46,11 @@ public class UserBorrowerController
         @PathVariable(value = "bookId") Integer bookId) throws UserNotFoundException, BookNotFoundException,
         MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException
     {
-        checkiFValidateRequestDataProvided(userId, bookId);
-        return userBorrowerServiceImplementor.borrowBook(userId, bookId);
+        checkifValidateRequestDataProvided(userId, bookId);
+        return userBookBorrowServiceImplementor.borrowBook(userId, bookId);
     }
 
-    protected void checkiFValidateRequestDataProvided(int userId, int bookId)
+    protected void checkifValidateRequestDataProvided(int userId, int bookId)
         throws UserNotFoundException, BookNotFoundException
     {
         this.userDataValidationServiceImplementor.checkIfValidUserIdProvided(userId);

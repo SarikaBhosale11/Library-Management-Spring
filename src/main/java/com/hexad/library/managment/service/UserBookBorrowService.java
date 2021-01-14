@@ -6,7 +6,7 @@ import com.hexad.library.managment.exception.MaximumAllowedCopyOfBookExceededExc
 import com.hexad.library.managment.exception.UserNotFoundException;
 import com.hexad.library.managment.representation.response.UserRepresetation;
 
-public interface UserBorrowerService
+public interface UserBookBorrowService
 {
     UserRepresetation borrowBook(int userId, int bookId) throws UserNotFoundException, BookNotFoundException,
         MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException;

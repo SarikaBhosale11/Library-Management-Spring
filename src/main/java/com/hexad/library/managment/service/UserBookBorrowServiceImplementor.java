@@ -16,7 +16,7 @@ import com.hexad.library.managment.vo.Book;
 import com.hexad.library.managment.vo.User;
 
 @Service
-public class UserBorrowerServiceImplementor implements UserBorrowerService
+public class UserBookBorrowServiceImplementor implements UserBookBorrowService
 {
 
     private UserBorrowerUpdateDAO userBorrowerUpdateDAOImplementor;
@@ -24,7 +24,7 @@ public class UserBorrowerServiceImplementor implements UserBorrowerService
     private UserDataValidationService userDataValidationServiceImplementor;
 
     @Autowired
-    public UserBorrowerServiceImplementor(UserBorrowerUpdateDAO userBorrowerUpdateDAOImplementor,
+    public UserBookBorrowServiceImplementor(UserBorrowerUpdateDAO userBorrowerUpdateDAOImplementor,
         UserDataValidationService userDataValidationServiceImplementor)
     {
         this.userBorrowerUpdateDAOImplementor = userBorrowerUpdateDAOImplementor;
@@ -36,7 +36,7 @@ public class UserBorrowerServiceImplementor implements UserBorrowerService
         MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException
     {
         checkIfUserAllowedToBorrowBook(userId, bookId);
-        User updatedUser = userBorrowerUpdateDAOImplementor.updateUserBorrowerDetails(userId, bookId);
+        User updatedUser = userBorrowerUpdateDAOImplementor.updateUserBookBorrowDetails(userId, bookId);
         UserRepresetation userRepresetation = new UserRepresetation(updatedUser.getUserId(), updatedUser.getUserName());
         for (Book book : updatedUser.getBorrowedBooks()) {
             userRepresetation.getBorrowedBooks().add(new BookRepresentation(book.getBookId(), book.getBookName(),
