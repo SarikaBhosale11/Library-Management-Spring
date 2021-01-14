@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.hexad.library.managment.dao.UserBorrowerUpdateDAO;
 import com.hexad.library.managment.exception.BookNotFoundException;
 import com.hexad.library.managment.exception.MaximumAllowedBooksExceededException;
+import com.hexad.library.managment.exception.MaximumAllowedCopyOfBookExceededException;
 import com.hexad.library.managment.exception.UserNotFoundException;
+import com.hexad.library.managment.helper.BooksDataHelper;
 import com.hexad.library.managment.representation.response.BookRepresentation;
 import com.hexad.library.managment.representation.response.UserRepresetation;
 import com.hexad.library.managment.validation.user.UserDataValidationService;
@@ -30,10 +32,10 @@ public class UserBorrowerServiceImplementor implements UserBorrowerService
     }
 
     @Override
-    public UserRepresetation borrowBook(int userId, int bookId)
-        throws UserNotFoundException, BookNotFoundException, MaximumAllowedBooksExceededException
+    public UserRepresetation borrowBook(int userId, int bookId) throws UserNotFoundException, BookNotFoundException,
+        MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException
     {
-        checkIfUserAllowedToBorrowBook(userId);
+        checkIfUserAllowedToBorrowBook(userId, bookId);
         User updatedUser = userBorrowerUpdateDAOImplementor.updateUserBorrowerDetails(userId, bookId);
         UserRepresetation userRepresetation = new UserRepresetation(updatedUser.getUserId(), updatedUser.getUserName());
         for (Book book : updatedUser.getBorrowedBooks()) {
@@ -43,10 +45,12 @@ public class UserBorrowerServiceImplementor implements UserBorrowerService
         return userRepresetation;
     }
 
-    protected void checkIfUserAllowedToBorrowBook(int userId)
-        throws UserNotFoundException, MaximumAllowedBooksExceededException
+    protected void checkIfUserAllowedToBorrowBook(int userId, int bookId)
+        throws UserNotFoundException, MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException
     {
-        this.userDataValidationServiceImplementor.checkIfUserAllowedToBorrowBook(userId);
+        this.userDataValidationServiceImplementor.checkIfUserHasAlreadyBorrowedTwoBooks(userId);
+        this.userDataValidationServiceImplementor.checkIfUserHasAlreadyBorrowedCopyOfBook(userId,
+            BooksDataHelper.getBookById(bookId));
     }
 
 }

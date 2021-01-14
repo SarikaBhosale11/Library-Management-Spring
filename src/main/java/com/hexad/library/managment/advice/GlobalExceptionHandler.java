@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.hexad.library.managment.exception.BookNotFoundException;
 import com.hexad.library.managment.exception.MaximumAllowedBooksExceededException;
+import com.hexad.library.managment.exception.MaximumAllowedCopyOfBookExceededException;
 import com.hexad.library.managment.exception.UserNotFoundException;
 
 /**
@@ -53,5 +54,13 @@ public class GlobalExceptionHandler
     {
         logger.warn("Maximum Allowed Books limit Exceeded ", exception.getMessage());
         return "Maximum Allowed books limit Exceeded";
+    }
+
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY, reason = "Maximum allowed copy of book exceeded")
+    @ExceptionHandler(MaximumAllowedCopyOfBookExceededException.class)
+    public String handleMaximumAllowedCopyOfBookExceededException(HttpServletRequest request, Exception exception)
+    {
+        logger.warn("Maximum allowed copy of book exceeded", exception.getMessage());
+        return "Maximum allowed copy of book exceeded";
     }
 }

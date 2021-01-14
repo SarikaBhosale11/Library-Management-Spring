@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hexad.library.managment.exception.BookNotFoundException;
 import com.hexad.library.managment.exception.MaximumAllowedBooksExceededException;
+import com.hexad.library.managment.exception.MaximumAllowedCopyOfBookExceededException;
 import com.hexad.library.managment.exception.UserNotFoundException;
 import com.hexad.library.managment.representation.response.UserRepresetation;
 import com.hexad.library.managment.service.UserBorrowerService;
@@ -42,8 +43,8 @@ public class UserBorrowerController
 
     @PostMapping("library/borrowBook/user/{userId}/book/{bookId}")
     public UserRepresetation borrowBooks(@PathVariable(value = "userId") Integer userId,
-        @PathVariable(value = "bookId") Integer bookId)
-        throws UserNotFoundException, BookNotFoundException, MaximumAllowedBooksExceededException
+        @PathVariable(value = "bookId") Integer bookId) throws UserNotFoundException, BookNotFoundException,
+        MaximumAllowedBooksExceededException, MaximumAllowedCopyOfBookExceededException
     {
         checkiFValidateRequestDataProvided(userId, bookId);
         return userBorrowerServiceImplementor.borrowBook(userId, bookId);

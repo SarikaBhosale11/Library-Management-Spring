@@ -1,10 +1,14 @@
 package com.hexad.library.managment.validation.user;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.hexad.library.managment.exception.MaximumAllowedBooksExceededException;
+import com.hexad.library.managment.exception.MaximumAllowedCopyOfBookExceededException;
 import com.hexad.library.managment.exception.UserNotFoundException;
 import com.hexad.library.managment.helper.UsersDataHelper;
+import com.hexad.library.managment.vo.Book;
 
 @Service
 public class UserDataValidationServiceImplementor implements UserDataValidationService
@@ -19,10 +23,21 @@ public class UserDataValidationServiceImplementor implements UserDataValidationS
     }
 
     @Override
-    public void checkIfUserAllowedToBorrowBook(int userId) throws MaximumAllowedBooksExceededException
+    public void checkIfUserHasAlreadyBorrowedTwoBooks(int userId) throws MaximumAllowedBooksExceededException
     {
-        if (UsersDataHelper.getBooksBorrowedByUser(userId).size() >= 2) {
+        List<Book> booksBorrwedByUser = UsersDataHelper.getBooksBorrowedByUser(userId);
+        if (booksBorrwedByUser.size() >= 2) {
             throw new MaximumAllowedBooksExceededException("Maximum allowed books exceeded");
+        }
+    }
+
+    @Override
+    public void checkIfUserHasAlreadyBorrowedCopyOfBook(int userId, Book book)
+        throws MaximumAllowedCopyOfBookExceededException
+    {
+        List<Book> booksBorrwedByUser = UsersDataHelper.getBooksBorrowedByUser(userId);
+        if (booksBorrwedByUser.contains(book)) {
+            throw new MaximumAllowedCopyOfBookExceededException("Maximum allowed copy of book exceeded");
         }
     }
 

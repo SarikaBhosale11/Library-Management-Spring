@@ -73,7 +73,7 @@ class TestUserBorrowerServiceImplementor
         Mockito.when(userBorrowerUpdateDAOImplementor.updateUserBorrowerDetails(Mockito.anyInt(), Mockito.anyInt()))
             .thenReturn(user);
         Mockito.doThrow(MaximumAllowedBooksExceededException.class).when(userDataValidationServiceImplementor)
-            .checkIfUserAllowedToBorrowBook(Mockito.any());
+            .checkIfUserHasAlreadyBorrowedTwoBooks(Mockito.any());
         Assertions.assertThrows(MaximumAllowedBooksExceededException.class, () -> {
             userBorrowerServiceImplementor.borrowBook(1, 101);
         });

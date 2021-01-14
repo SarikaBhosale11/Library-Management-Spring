@@ -90,4 +90,89 @@ public class HttpWebTest
         Assertions.assertEquals(422, response.getStatusCodeValue());
     }
 
+    @Test
+    public void testBorrowBook_BuyOneCopyOfBook() throws Exception
+    {
+        // Initially two copies of Book "Lets C" bookId=101 & one copy of "Head First Java" bookId=102 are available
+        LibraryRepresentation libraryRepresentation = this.restTemplate
+            .getForObject("http://localhost:" + port + "library/getAvailableBooks", LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        List<BookRepresentation> booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(2, booklist.size());
+        BookRepresentation letCBook = null;
+        for (BookRepresentation book : booklist) {
+            if (book.getBookId() == 101) {
+                letCBook = book;
+                break;
+            }
+        }
+        Assertions.assertNotNull(letCBook);
+        Assertions.assertEquals(2, letCBook.getNumberOfCopiesAvailable());
+        BookRepresentation HeadFirstBook = null;
+        for (BookRepresentation book : booklist) {
+            if (book.getBookId() == 102) {
+                HeadFirstBook = book;
+                break;
+            }
+        }
+        Assertions.assertNotNull(HeadFirstBook);
+        Assertions.assertEquals(1, HeadFirstBook.getNumberOfCopiesAvailable());
+
+        // borrow "Lets C" bookId=101 book
+        UserRepresetation user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/borrowBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(1), Integer.valueOf(101));
+        Assertions.assertNotNull(user);
+        List<BookRepresentation> borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(1, borrwedBooks.size());
+        Assertions.assertEquals("Lets C", borrwedBooks.get(0).getBookName());
+        Assertions.assertEquals(1, borrwedBooks.get(0).getNumberOfCopiesAvailable());
+
+        // available books still show "Lets C" bookId=101 as it still has one cpy left
+        libraryRepresentation = this.restTemplate.getForObject("http://localhost:" + port + "library/getAvailableBooks",
+            LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(2, booklist.size());
+        letCBook = null;
+        for (BookRepresentation book : booklist) {
+            if (book.getBookId() == 101) {
+                letCBook = book;
+                break;
+            }
+        }
+        Assertions.assertNotNull(letCBook);
+        Assertions.assertEquals(1, letCBook.getNumberOfCopiesAvailable());
+
+        // again borrow "Lets C" bookId=101, we should get exception
+        // MaximumAllowedCopyOfBookExceededException is mapped to HttpStatus.UNPROCESSABLE_ENTITY 422
+        ResponseEntity<String> response = restTemplate
+            .postForEntity("http://localhost:" + port + "library/borrowBook/user/1/book/109", null, String.class);
+        Assertions.assertEquals(422, response.getStatusCodeValue());
+
+        // try to borrow "Head First Java" bookId=102
+        user = this.restTemplate.postForObject(
+            "http://localhost:" + port + "library/borrowBook/user/{userId}/book/{bookId}", null,
+            UserRepresetation.class, Integer.valueOf(1), Integer.valueOf(102));
+        Assertions.assertNotNull(user);
+        borrwedBooks = user.getBorrowedBooks();
+        Assertions.assertNotNull(borrwedBooks);
+        Assertions.assertEquals(2, borrwedBooks.size()); // each of "Lets C" and "Head First Java"
+        Assertions.assertEquals("Head First Java", borrwedBooks.get(1).getBookName());
+        Assertions.assertEquals(0, borrwedBooks.get(1).getNumberOfCopiesAvailable());
+
+        // Now only "Lets C" bookId=101 should be there in available list and has one copy available
+        libraryRepresentation = this.restTemplate.getForObject("http://localhost:" + port + "library/getAvailableBooks",
+            LibraryRepresentation.class);
+        Assertions.assertNotNull(libraryRepresentation);
+        booklist = libraryRepresentation.getAvailableBooks();
+        Assertions.assertNotNull(booklist);
+        Assertions.assertEquals(1, booklist.size());
+        Assertions.assertEquals(1, booklist.get(0).getNumberOfCopiesAvailable());
+        Assertions.assertEquals("Lets C", booklist.get(0).getBookName());
+    }
+
 }
