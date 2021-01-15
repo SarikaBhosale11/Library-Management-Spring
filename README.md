@@ -35,13 +35,15 @@ Library managament system prvides abilty to user to get aviable books and borrow
        This provided loose coupling and each class was indepedently testable as dependancies can be externally injected. 
        
      - Development/Testing Stratergy 
-     A.  1. com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_NoBooksAvailableCondition() was written and it was  failing 
-            as there was no application logic was exist.
+     A.  1. com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_NoBooksAvailableCondition() 
+            was written and it was  failing as there was no application logic was exist.
             With flow implementation test case was passed for empty list.
-         2. Then com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition() was written and as it was  failing 
-            as we had only empty book list. It passsed over time when DataHelper class was implemeted to return dummy data.
-		 3. com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition_ForZeroCopies() was written. Intially it failed
-		    as BookServiceImplementor.getLibraryData() method was not checking for number of ccpies available. Check was added in method and test case passed.
+         2. Then com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition()
+	    was written and as it was  failing as we had only empty book list. It passsed over time when DataHelper class was 
+	    implemeted to return dummy data.
+	 3. com.hexad.library.managment.service.TestBookServiceImplementor.testGetAvailableBooks_booksAvailableCondition_ForZeroCopies()
+            was written. Intially it failed as BookServiceImplementor.getLibraryData() method was not checking for number of copies available. 
+	    Check was added in method and test case passed.
         
      B. Integration Test case.
         SpringBoot Test was written to call REST service and check if book list is written. 
@@ -77,7 +79,8 @@ Library managament system prvides abilty to user to get aviable books and borrow
       If any runtime error occurace the Status 500 with appropriate error message is returned in response. 
       
       - Database 
-      From DAO layer we can use Hibernate/jpa to fetch data from database. But I have created DataHelper class which returns static dummy data. 
+      From DAO layer we can use Hibernate/jpa to fetch data from database. But I have created DataHelper class which 
+      returns static dummy data. 
 	  
 # Flow description : Story 2
     - Requirement
@@ -85,16 +88,23 @@ Library managament system prvides abilty to user to get aviable books and borrow
      the book will be added to users borrowed list and removed from available list. 
 
     - Assumption
-     User has availabe book list from the REST I developed in Story 1. So frontend system will pass ids of user selected books along with user id to borrower REST. 
+     User has availabe book list from the REST I developed in Story 1. So frontend system will pass ids of user selected books along 
+     with user id to borrower REST. 
       
     - Development/Testing Stratergy 
-    A. 1. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_BoookIssuccefullyBorrowed() tests if book is succefully addded in borrowed     	   list.
-       2. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_UserTriedBorrowingThirdBook() checks for MaximumAllowedBooksExceededException  	    when user tries to borrow third book. 
+    A. 1. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_BoookIssuccefullyBorrowed() tests 
+          if book is succefully addded in borrowed list.
+       2. com.hexad.library.managment.service.TestUserBookBorrowServiceImplementor.testBorrowBook_UserTriedBorrowingThirdBook() checks 
+          for MaximumAllowedBooksExceededException when user tries to borrow third book. 
      
     B. Integration Test case.
-       1. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookisAddedInBorrowerList() checks if book is added into borrwedBooks list
-       2. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookIsRemovedFromLibrary() checks if book is removed from available book list
-       3. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_InValidUserIdProvided() checks for 422 http response code is retuned when incorrect userId is given.   	   UserNotFoundException is mapped to  422 Unprocessable Entity
+       1. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookisAddedInBorrowerList() checks 
+          if book is added into borrwedBooks list
+       2. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookIsRemovedFromLibrary() checks 
+          if book is removed from available book list
+       3. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_InValidUserIdProvided() checks 
+          for 422 http response code is retuned when incorrect userId is given. 
+	  UserNotFoundException is mapped to  422 Unprocessable Entity
        4. com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_InValidBookIdProvided() 
     
     C. Postamn test
