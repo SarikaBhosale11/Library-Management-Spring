@@ -192,26 +192,25 @@ Library managament system prvides abilty to user to get aviable books and borrow
     User should be able to return book one or two boks and accordingly stocks should be updated.
     
      - Development/Testing Stratergy 
-     A. 1. .hexad.library.managment.service.TestUserBookReturnServiceImplementor.testBorrowBook_BoookReturnedSuccessful_NoBookInBorrowedList() 
+     A. 1. com.hexad.library.managment.service.TestUserBookReturnServiceImplementor.testBorrowBook_BoookReturnedSuccessful_NoBookInBorrowedList() 
            user returns one book and borrowed book list is empty.
 	2. com.hexad.library.managment.service.TestUserBookReturnServiceImplementor.testBorrowBook_BoookReturnedSuccessful_OneBookInBorrowedList()
 	   user returns one book and borrowed book list has one book. 
 	   
 	   
      B. Integration test cases 	
-     
-     com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookIsReturned() covers following scenarios in given order
-    1. borrow book "Lets C" bookId=101
-    2. borrow book "Head First Java" bookId=102
-    3. get availalble books list
-       only one copy of "Lets C" bookId=101 should be available and "Head First Java" bookId=102 is not available
-    4. return "Lets C" bookId=101    
-    5. get availalble books list
-      two copies of book "Lets C" bookId=101 are available and "Head First Java" bookId=102 is not available
-    6. return "Head First Java" bookId=101
-       both books returned borrowed list should be empty
-    7. get availalble books list.
-       two copies of book "Lets C" bookId=101 are available and "Head First Java" bookId=102 is available
+        com.hexad.library.managment.webtest.HttpWebTest.testBorrowBook_BookIsReturned() covers following scenarios in given order
+    	1. borrow book "Lets C" bookId=101
+    	2. borrow book "Head First Java" bookId=102
+    	3. get availalble books list
+       	   only one copy of "Lets C" bookId=101 should be available and "Head First Java" bookId=102 is not available
+    	4. return "Lets C" bookId=101    
+    	5. get availalble books list
+           two copies of book "Lets C" bookId=101 are available and "Head First Java" bookId=102 is not available
+        6. return "Head First Java" bookId=101
+           both books returned borrowed list should be empty
+        7. get availalble books list.
+           two copies of book "Lets C" bookId=101 are available and "Head First Java" bookId=102 is available
       
      
   
